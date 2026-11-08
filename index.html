@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#182d2a">
+<title>쫄군이 주방 대작전 · 보용만두</title>
+<style>
+:root {
+  color-scheme: dark;
+  --page: #142723;
+  --panel: #1c332e;
+  --line: #3b5449;
+  --ink: #fff0d6;
+  --muted: #c1cebb;
+  --lime: #d6ec9e;
+  --peach: #ffa97d;
+  --gold: #ffce78;
+  --cream: #ffe3af;
+  font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; }
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 52% 8%, #334a37 0, transparent 64%),
+    repeating-linear-gradient(135deg, #fff1 0px, #fff1 1px, transparent 1px, transparent 15px),
+    var(--page);
+  background-blend-mode: normal, soft-light, normal;
+}
+button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: default; opacity: .46; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+.definitions { position: absolute; width: 0; height: 0; }
+.app {
+  width: min(100%, 1170px);
+  height: 100vh;
+  height: 100dvh;
+  margin: auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1.65vh, 17px);
+  padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+}
+.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.brand { display: flex; gap: 10px; align-items: center; }
+.brand-mark { width: 43px; height: 43px; flex: none; border-radius: 12px; background: var(--peach); display: grid; place-items: center; box-shadow: inset 0 -3px #8d503e66; }
+.brand-mark svg { width: 35px; height: 35px; }
+.brand strong { display: block; font-size: 19px; line-height: 1; letter-spacing: -.05em; }
+.brand small { display: block; margin-top: 5px; color: var(--muted); font: 750 9px/1.1 ui-monospace, monospace; letter-spacing: .12em; }
+.visit {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 13px; border: 1px solid #69806b; border-radius: 9px;
+  color: var(--ink); background: #1e382c; text-decoration: none; font-size: 12px; font-weight: 780;
+  white-space: nowrap;
+}
+.visit svg { width: 14px; height: 14px; color: var(--lime); }
+.visit:hover { background: #324c3c; }
+.layout { min-height: 0; display: grid; grid-template-columns: minmax(218px, 280px) minmax(0, 1fr); gap: clamp(12px, 2.2vw, 26px); }
+.side { min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(9px, 2.1vh, 22px); }
+.eyebrow { margin: 0; display: flex; align-items: center; gap: 8px; color: var(--lime); font: 800 11px/1.2 ui-monospace, monospace; letter-spacing: .13em; }
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 3px #d6ec9e25; }
+h1 { margin: 8px 0 0; font-size: clamp(31px, 4.8vw, 63px); line-height: .99; letter-spacing: -.085em; word-break: keep-all; }
+h1 span { display: block; margin-top: 5px; color: var(--peach); }
+.intro { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; word-break: keep-all; }
+.ticket {
+  position: relative; background: #f4dfb5; color: #352a24;
+  padding: 13px 14px 16px; border-radius: 8px 8px 3px 3px;
+  box-shadow: 0 4px 0 #0f2019;
+  background-image: linear-gradient(115deg, #fff4, transparent 60%);
+}
+.ticket::after {
+  position: absolute; content: ""; left: 0; right: 0; bottom: -4px; height: 5px;
+  background: linear-gradient(135deg, #f4dfb5 25%, transparent 25%) -5px 0 / 10px 10px,
+              linear-gradient(225deg, #f4dfb5 25%, transparent 25%) -5px 0 / 10px 10px;
+}
+.ticket-title { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 900; }
+.ticket-title span { color: #674e3e; font: 850 10px ui-monospace, monospace; letter-spacing: .11em; }
+.food-row { display: flex; align-items: center; gap: 5px; border-top: 1px dashed #967c5d; margin-top: 8px; padding-top: 6px; }
+.food-row svg { width: 37px; height: 37px; flex: none; }
+.food-row b { font-size: 13px; }
+.food-row small { display: block; color: #604b3c; font-size: 11px; }
+.game {
+  min-height: 0; min-width: 0;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px;
+  border: 1px solid var(--line); border-radius: 17px;
+  padding: clamp(7px, 1.2vw, 13px);
+  background: linear-gradient(150deg, #233c31, #152923 72%);
+  box-shadow: 0 7px 0 #10201a, inset 0 1px #ffffff16;
+}
+.scorebar {
+  display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, .85fr) minmax(0, .85fr);
+  border: 1px solid #4e6452; border-radius: 9px;
+  background: #152b23; overflow: hidden;
+}
+.stat { display: flex; gap: 5px 9px; align-items: center; justify-content: space-between; padding: 7px 10px; min-width: 0; }
+.stat + .stat { border-left: 1px solid #4e6452; }
+.stat span { font-size: 10px; font-weight: 750; color: var(--muted); white-space: nowrap; }
+.stat strong { font: 800 17px/1.05 ui-monospace, monospace; color: var(--lime); white-space: nowrap; }
+.stat:first-child strong { color: var(--peach); }
+.board-wrap { min-height: 0; position: relative; isolation: isolate; background: #101f1a; border-radius: 10px; box-shadow: inset 0 0 0 1px #47604b; }
+#board { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; }
+#board.nudge { animation: nudge .14s ease-out; }
+@keyframes nudge { 40% { transform: translateX(2px); } 75% { transform: translateX(-2px); } }
+.notice {
+  position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: max-content; max-width: calc(100% - 18px); text-align: center;
+  background: #20372ff5; border: 1px solid #809064; border-radius: 13px;
+  box-shadow: 0 7px 0 #101b15bf, 0 0 0 100vmax #111e1733;
+  padding: clamp(7px, 2vh, 20px) clamp(10px, 3vw, 30px);
+}
+.board-wrap { overflow: hidden; }
+.notice small { display: block; font: 850 9px/1.15 ui-monospace, monospace; letter-spacing: .13em; color: var(--lime); }
+.notice h2 { margin: 5px 0 4px; font-size: clamp(16px, 3.4vw, 29px); line-height: 1.12; letter-spacing: -.055em; }
+.notice p { margin: 0; color: var(--muted); font-size: clamp(10px, 1.55vw, 13px); line-height: 1.4; }
+.notice button { margin-top: 8px; border: 0; border-radius: 7px; padding: 6px 16px; background: var(--gold); color: #332820; font-size: 12px; font-weight: 850; }
+.game-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
+#status { min-width: 0; color: var(--muted); font-size: clamp(9px, 1.45vw, 12px); line-height: 1.25; margin: 0; word-break: keep-all; }
+.mini { display: flex; gap: 5px; flex: none; }
+.mini button { display: inline-flex; align-items: center; gap: 4px; min-height: 30px; padding: 3px 7px; border: 1px solid #5c705c; border-radius: 6px; background: #293e32; font-size: 10px; font-weight: 750; white-space: nowrap; }
+.mini svg { width: 13px; height: 13px; }
+.footer {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: clamp(8px, 1.7vw, 20px);
+  padding: 7px 9px; border-radius: 12px; border: 1px solid var(--line);
+  background: #192f26; box-shadow: 0 3px 0 #102018;
+}
+.actions { display: grid; grid-template-columns: .84fr .84fr 1fr 1.27fr; gap: 6px; }
+.action, .direction {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 8px; border: 1px solid #657760; background: #304736; box-shadow: inset 0 -3px #13282055;
+  min-width: 0; font-size: clamp(10px, 1.55vw, 14px); font-weight: 850; padding: 4px 3px; min-height: 43px;
+  white-space: nowrap;
+}
+.action svg, .direction svg { width: 17px; height: 17px; flex: none; }
+.action.primary { background: var(--gold); color: #382a22; border-color: #ffdb9f; box-shadow: inset 0 -3px #bc772f77; }
+.action[aria-pressed="true"] { background: var(--lime); color: #263622; border-color: #ecf8bc; }
+.action:active:not(:disabled), .direction:active { transform: translateY(2px); }
+.pad { display: grid; grid-template-columns: repeat(4, 46px); gap: 5px; }
+.direction { min-height: 40px; color: var(--cream); }
+@media (hover: hover) {
+  .action:hover:not(:disabled):not(.primary):not([aria-pressed="true"]), .direction:hover, .mini button:hover:not(:disabled) { background: #456048; }
+}
+@media (max-width: 710px) and (orientation: portrait) {
+  .app { width: min(100%, 540px); }
+  .layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 8px; }
+  .side { gap: 2px; }
+  .eyebrow, .ticket { display: none; }
+  h1 { font-size: clamp(22px, 6vw, 34px); margin: 2px 0 1px; }
+  h1 span { display: inline; margin: 0 0 0 .16em; }
+  .intro { font-size: 11px; }
+  .game { gap: 6px; }
+  .footer { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .pad { grid-template-columns: repeat(4, 1fr); }
+  .direction { min-height: 42px; }
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .app { gap: 5px; padding-top: max(5px, env(safe-area-inset-top)); padding-bottom: max(5px, env(safe-area-inset-bottom)); }
+  .brand-mark { width: 33px; height: 33px; }
+  .brand-mark svg { width: 28px; height: 28px; }
+  .brand strong { font-size: 16px; }
+  .brand small { margin-top: 3px; }
+  .visit { padding: 5px 9px; }
+  .layout { grid-template-columns: minmax(130px, .33fr) minmax(0, 1fr); gap: 8px; }
+  .side { gap: 5px; }
+  h1 { font-size: clamp(21px, 4.5vw, 36px); margin-top: 5px; }
+  .intro { font-size: 11px; }
+  .ticket { display: none; }
+  .game { padding: 5px; gap: 4px; }
+  .stat { padding: 3px 7px; }
+  .stat strong { font-size: 14px; }
+  .mini button { min-height: 24px; }
+  .footer { padding: 4px 6px; }
+  .action, .direction { min-height: 33px; }
+  .pad { grid-template-columns: repeat(4, clamp(30px, 5vw, 43px)); }
+}
+@media (max-height: 530px) and (orientation: portrait) {
+  .app { gap: 5px; padding-top: max(5px, env(safe-area-inset-top)); padding-bottom: max(5px, env(safe-area-inset-bottom)); }
+  .brand-mark { width: 32px; height: 32px; }
+  .brand-mark svg { width: 27px; height: 27px; }
+  .visit { padding: 6px 9px; }
+  .layout { gap: 4px; }
+  .game { padding: 5px; gap: 4px; }
+  .stat { padding: 4px 6px; }
+  .mini button { min-height: 24px; }
+  .footer { padding: 4px 6px; gap: 4px; }
+  .action, .direction { min-height: 33px; }
+}
+@media (max-width: 350px) {
+  .app { padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
+  .action { gap: 3px; }
+  .action svg { width: 13px; height: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { #board.nudge { animation: none; } }
+</style>
+</head>
+<body>
+<svg class="definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+  <pattern id="floor" width="200" height="200" patternUnits="userSpaceOnUse">
+    <path fill="#edce9a" d="M0 0h200v200H0z"/>
+    <path fill="#e5be8d" d="M100 0h100v100H100zM0 100h100v100H0z"/>
+    <path fill="none" stroke="#9c7358" opacity=".3" stroke-width="3" d="M0 0h200v200H0zM100 0v200M0 100h200"/>
+    <path fill="none" stroke="#fff1ca" opacity=".5" stroke-width="2" d="M4 95h91m9 0h91M4 195h91m9 0h91"/>
+  </pattern>
+  <symbol id="wall" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#432f29"/>
+    <rect x="2" y="3" width="96" height="89" rx="7" fill="#654337" stroke="#8a5b43" stroke-width="2"/>
+    <path d="M7 14Q7 8 15 8H85q8 0 8 6v58H7z" fill="#a56a4c"/>
+    <rect x="11" y="13" width="78" height="54" rx="4" fill="#88583f" stroke="#c78a5f" stroke-width="2"/>
+    <path d="M19 25h62M19 55h62" stroke="#704632" stroke-width="2" opacity=".7"/>
+    <path d="M43 40h14" stroke="#f0bc75" stroke-width="4" stroke-linecap="round"/>
+    <path d="M8 77h84" stroke="#be8155" stroke-width="3" opacity=".6"/>
+  </symbol>
+  <symbol id="wall-pot" viewBox="0 0 100 100">
+    <use href="#wall"/>
+    <ellipse cx="49" cy="56" rx="34" ry="12" fill="#422b25" opacity=".5"/>
+    <path d="M24 29h51v23q0 13-25 13T24 52z" fill="#3e5e52" stroke="#22382d" stroke-width="3"/>
+    <path d="M24 41h-9v9h9m51-9h10v9H75" fill="none" stroke="#e7bc82" stroke-width="4"/>
+    <ellipse cx="49.5" cy="29" rx="26" ry="9" fill="#96ad8a" stroke="#22382d" stroke-width="3"/>
+    <path d="M43 23q7-10 14 0" fill="none" stroke="#e7bc82" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="wall-board" viewBox="0 0 100 100">
+    <use href="#wall"/>
+    <rect x="20" y="19" width="60" height="47" rx="5" fill="#e8b777" stroke="#69432f" stroke-width="3"/>
+    <path d="M31 31h38M31 38h38M31 55h38" stroke="#a56a45" stroke-width="2" opacity=".75"/>
+    <path d="m40 53 19-19 5 6-19 19z" fill="#e5ded1" stroke="#513b32" stroke-width="2"/>
+    <path d="m36 58 6-6 5 6-6 6z" fill="#40574d" stroke="#513b32" stroke-width="2"/>
+  </symbol>
+  <symbol id="food0" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="77" rx="37" ry="12" fill="#633c2b" opacity=".24"/>
+    <path d="M12 48h76L78 69q-6 13-28 13T22 69z" fill="#9d4238" stroke="#51302b" stroke-width="4"/>
+    <ellipse cx="50" cy="46" rx="38" ry="24" fill="#ffefbc" stroke="#683729" stroke-width="4"/>
+    <ellipse cx="50" cy="47" rx="30" ry="17" fill="#c35c3b"/>
+    <path d="M27 44q7-11 21-6t23 2M24 50q13-10 25-3t25 1M33 55q8-6 18-1t16-1" fill="none" stroke="#ffbe6f" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="m43 37 9 5m4-8 8 4m-27 8 6 3m20-3 7-1" stroke="#d3ec91" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="food1" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="76" rx="40" ry="10" fill="#4c5140" opacity=".24"/>
+    <ellipse cx="50" cy="61" rx="41" ry="22" fill="#528074" stroke="#2d5149" stroke-width="4"/>
+    <ellipse cx="50" cy="56" rx="41" ry="22" fill="#b5dfc5" stroke="#2d5149" stroke-width="4"/>
+    <ellipse cx="50" cy="56" rx="31" ry="14" fill="#7da58c"/>
+    <path d="M32 54q0-16 19-23 11 17 6 25-13 9-25-2z" fill="#ffda92" stroke="#a26744" stroke-width="3"/>
+    <path d="M50 60q1-17 20-23 12 16 7 23-13 9-27 0zM20 59q0-13 14-21 13 13 9 22-11 8-23-1z" fill="#ffd080" stroke="#9b623e" stroke-width="3"/>
+    <path d="m27 55 6 3m2-10 5 4m-1-11 7 3m1-7 6 4m6 11 7 4m1-10 7 5" stroke="#d18f50" stroke-width="2.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="food2" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="75" rx="37" ry="12" fill="#634429" opacity=".22"/>
+    <path d="M12 47h76v18q0 14-38 14T12 65z" fill="#c88647" stroke="#6d4d2e" stroke-width="4"/>
+    <ellipse cx="50" cy="47" rx="38" ry="21" fill="#f4bc6d" stroke="#6d4d2e" stroke-width="4"/>
+    <ellipse cx="50" cy="47" rx="30" ry="14" fill="#ffdd95"/>
+    <path d="M25 49q0-10 12-14 9 5 8 13-10 6-20 1zM51 50q1-11 14-14 11 6 9 14-11 7-23 0z" fill="#fff0b6" stroke="#a77541" stroke-width="2.5"/>
+    <path d="M36 57q1-10 12-16 10 6 10 15-9 7-22 1z" fill="#ffe3a1" stroke="#a77541" stroke-width="2.5"/>
+    <path d="M24 63v6m12-3v6m14-5v6m14-7v6m12-9v6" stroke="#8f5b35" stroke-width="2"/>
+  </symbol>
+  <symbol id="chef" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="84" rx="29" ry="10" fill="#42372c" opacity=".25"/>
+    <path d="M24 76q3-20 26-21 23 1 26 21v8q-26 12-52 0z" fill="#3d6d58" stroke="#233c33" stroke-width="4"/>
+    <path d="M36 69q14 11 28 0v15q-14 7-28 0z" fill="#eecb87"/>
+    <circle cx="50" cy="45" r="21" fill="#ffc68e" stroke="#573a2d" stroke-width="4"/>
+    <path d="M31 40v-9q-13-5-7-17 5-9 15-6 10-11 21 0 12-4 17 6 6 12-7 17v9z" fill="#fff3d0" stroke="#573a2d" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M32 32h36" stroke="#d7b583" stroke-width="3"/>
+    <circle cx="43" cy="48" r="2.7" fill="#47342d"/><circle cx="57" cy="48" r="2.7" fill="#47342d"/>
+    <path d="M45 55q5 4 10 0" fill="none" stroke="#7d4738" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M31 74q5 4 8 2m23 0q5 1 8-3" fill="none" stroke="#ffc68e" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M13 4h7v7m0-7-9 9M10 6H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M5 11a7 7 0 1 1 2 6m-3-6V5m0 6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="m9 5-5 5 5 5m-4-5h9a5 5 0 0 1 0 10h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-auto" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-12h-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs>
+</svg>
+<main class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark"><svg aria-hidden="true"><use href="#food1"/></svg></div>
+      <div><strong>보용만두</strong><small>BOYONG MANDOO ARCADE</small></div>
+    </div>
+    <a class="visit" href="https://windul2.github.io/Boyong_Mandoo_V2/" target="_blank" rel="noopener noreferrer">보용만두 V2 둘러보기 <svg aria-hidden="true"><use href="#i-link"/></svg></a>
+  </header>
+  <div class="layout">
+    <aside class="side" aria-labelledby="title">
+      <div>
+        <p class="eyebrow">KITCHEN ROUTE</p>
+        <h1 id="title">쫄군이 <span>주방 대작전</span></h1>
+      </div>
+      <p class="intro">접시를 밀어 같은 색과 번호의 손님 자리에 올려놓으세요.</p>
+      <div class="ticket">
+        <div class="ticket-title">시그니처 주문표 <span>NO. 01</span></div>
+        <div class="food-row">
+          <svg aria-hidden="true"><use href="#food0"/></svg><svg aria-hidden="true"><use href="#food1"/></svg>
+          <div><b>쫄군이</b><small>쫄면 + 군만두</small></div>
+        </div>
+      </div>
+    </aside>
+    <section class="game" aria-label="주방 퍼즐">
+      <div class="scorebar">
+        <div class="stat"><span>스테이지</span><strong id="stage-number">01 / 05</strong></div>
+        <div class="stat"><span>서빙</span><strong id="served">0 / 2</strong></div>
+        <div class="stat"><span>이동</span><strong id="moves">00</strong></div>
+      </div>
+      <div class="board-wrap">
+        <svg id="board" viewBox="0 0 800 600" role="img" aria-label="접시를 밀어 이동하는 주방 지도">
+          <g id="tiles"></g><g id="tables"></g><g id="pieces"></g>
+        </svg>
+        <div class="notice" id="notice">
+          <small id="notice-kicker">ORDER UP</small>
+          <h2 id="notice-title">주문 들어왔어요!</h2>
+          <p id="notice-text">시작을 눌러 첫 주문을 배달하세요.</p>
+          <button id="next" type="button" hidden>다음 주방</button>
+        </div>
+      </div>
+      <div class="game-meta">
+        <p id="status" role="status">방향키 · WASD · 화면 쓸기</p>
+        <div class="mini">
+          <button id="undo" type="button" disabled><svg aria-hidden="true"><use href="#i-undo"/></svg>되돌리기</button>
+          <button id="retry" type="button" disabled><svg aria-hidden="true"><use href="#i-reset"/></svg>판 다시</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="footer">
+    <div class="actions" aria-label="게임 제어">
+      <button class="action primary" id="start" type="button"><svg aria-hidden="true"><use href="#i-play"/></svg>시작</button>
+      <button class="action" id="pause" type="button" disabled><svg aria-hidden="true"><use href="#i-pause"/></svg>정지</button>
+      <button class="action" id="reset" type="button"><svg aria-hidden="true"><use href="#i-reset"/></svg>처음으로</button>
+      <button class="action" id="auto" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#i-auto"/></svg>자동플레이</button>
+    </div>
+    <div class="pad" aria-label="화면 방향키">
+      <button class="direction" type="button" data-step="0" aria-label="왼쪽"><svg style="transform:rotate(180deg)" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <button class="direction" type="button" data-step="1" aria-label="위쪽"><svg style="transform:rotate(-90deg)" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <button class="direction" type="button" data-step="2" aria-label="아래쪽"><svg style="transform:rotate(90deg)" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <button class="direction" type="button" data-step="3" aria-label="오른쪽"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+</main>
+<script>
+"use strict";
+
+const levels = [
+  { name: "첫 주문", map: [
+    "########", "#    a #", "# A    #", "# @ B  #", "#   b  #", "########"
+  ] },
+  { name: "좁은 통로", map: [
+    "########", "# b    #", "# # B  #", "# @ #A #", "#    a #", "########"
+  ] },
+  { name: "자리 바꾸기", map: [
+    "########", "#   #  #", "# A B  #", "#a@# # #", "# b    #", "########"
+  ] },
+  { name: "세 접시 주문", map: [
+    "########", "#b  # a#", "# A    #", "# # B  #", "# @ C c#", "########"
+  ] },
+  { name: "마지막 단체 손님", map: [
+    "########", "# a  # #", "# Bc@ b#", "# #CA  #", "#   #  #", "########"
+  ] }
+];
+const menu = [
+  { label: "쫄면", color: "#a84436", light: "#ffe3b5" },
+  { label: "군만두", color: "#2e6458", light: "#d8f1d4" },
+  { label: "찐만두", color: "#8a5c29", light: "#ffdf91" }
+];
+const columns = 8;
+const directions = [-1, -columns, columns, 1];
+const help = "방향키 · WASD · 화면 쓸기";
+const svgNS = "http://www.w3.org/2000/svg";
+const el = Object.fromEntries([
+  "board", "tiles", "tables", "pieces", "stage-number", "served", "moves",
+  "notice", "notice-kicker", "notice-title", "notice-text", "next", "status",
+  "undo", "retry", "start", "pause", "reset", "auto"
+].map(id => [id, document.getElementById(id)]));
+
+let stage = 0;
+let phase = "ready";
+let walls, targets, state, history, tableNodes, foodNodes, chefNode;
+let completedMoves = 0;
+let automatic = false;
+let timer = 0;
+let message = help;
+
+function svg(parent, tag, attributes) {
+  const node = document.createElementNS(svgNS, tag);
+  for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
+  parent.append(node);
+  return node;
+}
+function place(node, index) {
+  const x = (index % columns) * 100;
+  const y = Math.floor(index / columns) * 100;
+  node.setAttribute("transform", `translate(${x} ${y})`);
+}
+function label(parent, x, y, content, color, size) {
+  const node = svg(parent, "text", { x, y, fill: color, "font-size": size, "font-weight": 900, "text-anchor": "middle", "font-family": "system-ui, sans-serif" });
+  node.textContent = content;
+  return node;
+}
+function badge(parent, index, x, y) {
+  const { color, light } = menu[index];
+  svg(parent, "circle", { cx: x, cy: y, r: 12, fill: color, stroke: light, "stroke-width": 2 });
+  label(parent, x, y + 5, index + 1, light, 15);
+}
+function drawRoom() {
+  el.tiles.replaceChildren();
+  el.tables.replaceChildren();
+  el.pieces.replaceChildren();
+  svg(el.tiles, "rect", { width: 800, height: 600, fill: "url(#floor)" });
+  walls.forEach((blocked, index) => {
+    if (!blocked) return;
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    const sprite = row === 0 && (column === 2 || column === 5) ? "#wall-pot"
+      : (row === 0 || row === 5) && (column === 3 || column === 6) ? "#wall-board" : "#wall";
+    svg(el.tiles, "use", { href: sprite, x: column * 100, y: row * 100, width: 100, height: 100 });
+  });
+  tableNodes = targets.map((cell, index) => {
+    const table = svg(el.tables, "g", {});
+    const { color, light } = menu[index];
+    place(table, cell);
+    svg(table, "rect", { x: 12, y: 14, width: 76, height: 74, rx: 14, fill: light, stroke: color, "stroke-width": 4 });
+    svg(table, "rect", { x: 20, y: 22, width: 60, height: 58, rx: 10, fill: "none", stroke: color, "stroke-width": 2, "stroke-dasharray": "4 4" });
+    label(table, 50, 61, index + 1, color, 30);
+    return table;
+  });
+  foodNodes = state.boxes.map((_, index) => {
+    const group = svg(el.pieces, "g", {});
+    svg(group, "use", { href: "#food" + index, x: 4, y: 2, width: 92, height: 92 });
+    badge(group, index, 77, 23);
+    const check = svg(group, "g", { visibility: "hidden" });
+    svg(check, "circle", { cx: 22, cy: 23, r: 12, fill: "#365c38", stroke: "#edffc4", "stroke-width": 2 });
+    svg(check, "path", { d: "m17 23 4 4 6-8", fill: "none", stroke: "#f0ffc8", "stroke-width": 3, "stroke-linecap": "round", "stroke-linejoin": "round" });
+    return { group, check };
+  });
+  chefNode = svg(el.pieces, "use", { href: "#chef", x: 7, y: 6, width: 86, height: 86 });
+}
+
+function render() {
+  const settled = state.boxes.map((cell, index) => cell === targets[index]);
+  const count = settled.filter(Boolean).length;
+  place(chefNode, state.player);
+  foodNodes.forEach(({ group, check }, index) => {
+    place(group, state.boxes[index]);
+    check.setAttribute("visibility", settled[index] ? "visible" : "hidden");
+    tableNodes[index].setAttribute("opacity", settled[index] ? ".83" : "1");
+  });
+  el.board.setAttribute("aria-label", "주방 지도. " + targets.map((_, index) => `${menu[index].label} ${settled[index] ? "서빙 완료" : "서빙 대기"}`).join(", "));
+  el["stage-number"].textContent = `${String(stage + 1).padStart(2, "0")} / ${String(levels.length).padStart(2, "0")}`;
+  el.served.textContent = `${count} / ${targets.length}`;
+  el.moves.textContent = String(history.length).padStart(2, "0");
+  if (el.status.textContent !== message) el.status.textContent = message;
+  el.undo.disabled = !history.length || phase !== "running" || automatic;
+  el.retry.disabled = phase === "ready" || phase === "finished";
+  el.start.disabled = phase === "running" || phase === "cleared" || phase === "finished";
+  el.pause.disabled = phase !== "running" && !automatic;
+  el.auto.disabled = phase === "finished";
+  el.auto.setAttribute("aria-pressed", String(automatic));
+  el.notice.hidden = phase === "running";
+  el.next.hidden = phase !== "cleared" && phase !== "finished";
+  if (phase === "ready") showNotice("ORDER UP", "주문 들어왔어요!", "시작을 눌러 첫 주문을 배달하세요.");
+  if (phase === "paused") showNotice("PAUSED", "잠깐 쉬는 중", "시작을 누르면 이어서 플레이합니다.");
+  if (phase === "cleared") {
+    showNotice("ORDER COMPLETE", "서빙 완료!", `${levels[stage].name} · ${history.length}번 이동`);
+    el.next.textContent = "다음 주방";
+  }
+  if (phase === "finished") {
+    showNotice("ALL ORDERS SERVED", "모든 주문을 배달했어요!", `주방 ${levels.length}곳 완료 · 총 ${completedMoves + history.length}번 이동`);
+    el.next.textContent = "다시 도전";
+  }
+}
+function showNotice(kicker, title, detail) {
+  el["notice-kicker"].textContent = kicker;
+  el["notice-title"].textContent = title;
+  el["notice-text"].textContent = detail;
+}
+function loadStage(index, nextPhase) {
+  stage = index;
+  phase = nextPhase;
+  const map = levels[index].map.join("");
+  walls = [...map].map(cell => cell === "#");
+  targets = ["a", "b", "c"].map(cell => map.indexOf(cell)).filter(cell => cell >= 0);
+  state = {
+    player: map.indexOf("@"),
+    boxes: ["A", "B", "C"].map(cell => map.indexOf(cell)).filter(cell => cell >= 0)
+  };
+  history = [];
+  message = nextPhase === "ready" ? help : levels[stage].name + " · " + help;
+  drawRoom();
+  render();
+}
+function step(from, delta) {
+  const player = from.player + delta;
+  if (walls[player]) return null;
+  const index = from.boxes.indexOf(player);
+  if (index < 0) return { player, boxes: from.boxes };
+  const destination = player + delta;
+  if (walls[destination] || from.boxes.includes(destination)) return null;
+  const boxes = from.boxes.slice();
+  boxes[index] = destination;
+  return { player, boxes };
+}
+function isSolved(position) {
+  return position.boxes.every((cell, index) => cell === targets[index]);
+}
+function move(delta) {
+  if (phase !== "running") return false;
+  const next = step(state, delta);
+  if (!next) return false;
+  const placed = next.boxes.some((cell, index) => cell === targets[index] && state.boxes[index] !== cell);
+  history.push(state);
+  state = next;
+  message = automatic ? "자동플레이 중" : placed ? "접시 한 개 서빙 완료!" : help;
+  if (isSolved(state)) {
+    const final = stage === levels.length - 1;
+    phase = final ? "finished" : "cleared";
+    message = final ? "영업 종료 · 모든 주문 완료" : "다음 주문이 준비됐어요.";
+    if (final) stopAuto();
+  }
+  render();
+  return true;
+}
+function manualMove(index) {
+  if (automatic || phase !== "running") return;
+  if (!move(directions[index])) {
+    el.board.classList.remove("nudge");
+    void el.board.getBoundingClientRect();
+    el.board.classList.add("nudge");
+  }
+}
+function nextStage() {
+  if (phase === "finished") {
+    resetGame();
+    return;
+  }
+  if (phase !== "cleared") return;
+  clearTimeout(timer);
+  completedMoves += history.length;
+  loadStage(stage + 1, "running");
+  if (automatic) runAuto();
+}
+function resetGame() {
+  stopAuto();
+  completedMoves = 0;
+  loadStage(0, "ready");
+}
+
+function solve(start) {
+  const key = position => position.boxes.reduce((value, cell) => value * 64 + cell, position.player);
+  const queue = [{ position: start, parent: -1, delta: 0 }];
+  const seen = new Set([key(start)]);
+  for (let head = 0; head < queue.length; head++) {
+    const node = queue[head];
+    if (isSolved(node.position)) {
+      const route = [];
+      for (let i = head; queue[i].parent !== -1; i = queue[i].parent) route.push(queue[i].delta);
+      return route.reverse();
+    }
+    for (const delta of directions) {
+      const position = step(node.position, delta);
+      if (!position) continue;
+      const id = key(position);
+      if (seen.has(id)) continue;
+      seen.add(id);
+      queue.push({ position, parent: head, delta });
+    }
+  }
+  return null;
+}
+function stopAuto() {
+  automatic = false;
+  clearTimeout(timer);
+}
+function runAuto() {
+  const route = solve(state);
+  if (!route) {
+    stopAuto();
+    message = "길이 막혔어요. 되돌리기나 판 다시를 눌러 주세요.";
+    render();
+    return;
+  }
+  let index = 0;
+  message = "자동플레이 중";
+  render();
+  function advance() {
+    if (!automatic || phase !== "running") return;
+    move(route[index++]);
+    if (phase === "cleared") timer = setTimeout(nextStage, 900);
+    else if (phase === "running" && index < route.length) timer = setTimeout(advance, 165);
+  }
+  timer = setTimeout(advance, 165);
+}
+
+el.start.addEventListener("click", () => {
+  if (phase !== "ready" && phase !== "paused") return;
+  phase = "running";
+  message = levels[stage].name + " · " + help;
+  render();
+});
+el.pause.addEventListener("click", () => {
+  stopAuto();
+  if (phase === "running") phase = "paused";
+  message = "일시정지";
+  render();
+});
+el.reset.addEventListener("click", resetGame);
+el.retry.addEventListener("click", () => {
+  stopAuto();
+  loadStage(stage, "running");
+});
+el.undo.addEventListener("click", () => {
+  if (!history.length || automatic || phase !== "running") return;
+  state = history.pop();
+  message = "한 수 되돌렸어요.";
+  render();
+});
+el.next.addEventListener("click", nextStage);
+el.auto.addEventListener("click", () => {
+  if (phase === "finished") return;
+  if (automatic) {
+    stopAuto();
+    message = phase === "cleared" ? "다음 주문이 준비됐어요." : help;
+    render();
+    return;
+  }
+  automatic = true;
+  if (phase === "cleared") {
+    nextStage();
+    return;
+  }
+  phase = "running";
+  runAuto();
+});
+
+for (const button of document.querySelectorAll("[data-step]")) {
+  button.addEventListener("click", () => manualMove(Number(button.dataset.step)));
+}
+const keys = { arrowleft: 0, a: 0, arrowup: 1, w: 1, arrowdown: 2, s: 2, arrowright: 3, d: 3 };
+document.addEventListener("keydown", event => {
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  const key = event.key.toLowerCase();
+  if (!Object.hasOwn(keys, key)) return;
+  event.preventDefault();
+  manualMove(keys[key]);
+});
+let swipe = null;
+el.board.addEventListener("pointerdown", event => {
+  if (!event.isPrimary || event.button !== 0 || phase !== "running") return;
+  swipe = { id: event.pointerId, x: event.clientX, y: event.clientY };
+  el.board.setPointerCapture(event.pointerId);
+});
+el.board.addEventListener("pointerup", event => {
+  if (!swipe || event.pointerId !== swipe.id) return;
+  const dx = event.clientX - swipe.x;
+  const dy = event.clientY - swipe.y;
+  swipe = null;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) < 18) return;
+  const direction = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 0 : 3) : (dy < 0 ? 1 : 2);
+  manualMove(direction);
+});
+el.board.addEventListener("pointercancel", event => {
+  if (swipe?.id === event.pointerId) swipe = null;
+});
+el.board.addEventListener("lostpointercapture", event => {
+  if (swipe?.id === event.pointerId) swipe = null;
+});
+loadStage(0, "ready");
+</script>
+</body>
+</html>
